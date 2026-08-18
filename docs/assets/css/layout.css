@@ -1,329 +1,226 @@
-/* CarHunter — layout: container, sekce, nav, hero, grid, patička. */
-
-.page {
-  position: relative;
-  z-index: 1;
-}
-
+/* CarHunter — kostra stránky: hlavička, pásy sekcí, mřížky, patička. */
 .container {
-  width: min(100% - 2.5rem, var(--container));
+  max-width: var(--container);
   margin-inline: auto;
+  padding-inline: var(--gutter);
 }
 
-.section {
-  padding-block: var(--space-6);
-  position: relative;
-}
-
-.section--tight {
-  padding-block: var(--space-5);
-}
-
-.section__head {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
-  max-width: 68ch;
-}
-
-.rule {
-  height: 1px;
-  background: linear-gradient(to right, var(--hairline), transparent);
-}
-
-/* --- Navigace --- */
-
-.nav {
+/* ---------- Hlavička ---------- */
+.header {
   position: sticky;
   top: 0;
   z-index: 50;
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  background: rgba(7, 9, 12, 0.62);
-  border-bottom: 1px solid var(--hairline);
+  background: rgba(249, 246, 240, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
 }
 
-.nav__inner {
+.header__inner {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
-  padding-block: var(--space-2);
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 4.25rem;
 }
 
-.nav__links {
-  display: flex;
-  gap: var(--space-4);
-  margin-left: auto;
-  font-size: var(--step--1);
-  font-family: var(--font-mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-dim);
-}
-
-.nav__links a {
-  transition: color var(--dur-fast) var(--ease);
-}
-
-.nav__links a:hover {
-  color: var(--lime);
-}
-
-@media (max-width: 900px) {
-  .nav__links {
-    display: none;
-  }
-}
-
-.logo {
-  display: flex;
+.brand {
+  display: inline-flex;
   align-items: center;
   gap: 0.6rem;
   font-family: var(--font-display);
   font-weight: 700;
-  letter-spacing: -0.02em;
-  font-size: 1.05rem;
-}
-
-.logo__mark {
-  width: 30px;
-  height: 30px;
-  flex: none;
-}
-
-/* --- Hero --- */
-
-.hero {
-  padding-top: var(--space-6);
-  padding-bottom: var(--space-6);
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: var(--space-5);
-  align-items: center;
-  min-height: min(88vh, 820px);
-}
-
-@media (max-width: 980px) {
-  .hero {
-    grid-template-columns: 1fr;
-    min-height: 0;
-    padding-top: var(--space-5);
-  }
-}
-
-.hero__copy {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.hero__title span {
-  display: block;
-}
-
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-top: var(--space-2);
-}
-
-.hero__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3) var(--space-4);
-  margin-top: var(--space-3);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--hairline);
-  font-family: var(--font-mono);
-  font-size: var(--step--1);
-  color: var(--ink-faint);
-}
-
-.hero__fact strong {
-  display: block;
-  font-family: var(--font-display);
-  font-size: var(--step-2);
+  font-size: 1.3rem;
+  text-decoration: none;
   color: var(--ink);
-  line-height: 1;
 }
 
-.hero__visual {
-  position: relative;
-  aspect-ratio: 1;
-  display: grid;
-  place-items: center;
+.brand svg {
+  width: 2rem;
+  height: 2rem;
 }
 
-@media (max-width: 980px) {
-  .hero__visual {
-    max-width: 460px;
-    width: 100%;
-    margin-inline: auto;
-  }
-}
-
-/* Radarový disk s blipy a monitorem */
-
-.hero__radar {
-  position: relative;
-  width: min(100%, 460px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 1px solid var(--hairline);
-  background: radial-gradient(circle at 50% 50%, rgba(198, 242, 78, 0.05), transparent 62%);
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.blip {
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 12px 2px rgba(110, 231, 255, 0.55);
-  animation: blip-fade 7s linear infinite;
-}
-
-.blip--1 {
-  left: 30%;
-  top: 34%;
-  animation-delay: 0.6s;
-}
-.blip--2 {
-  left: 63%;
-  top: 27%;
-  animation-delay: 2.1s;
-  background: var(--lime);
-  box-shadow: 0 0 12px 2px rgba(198, 242, 78, 0.55);
-}
-.blip--3 {
-  left: 71%;
-  top: 62%;
-  animation-delay: 3.9s;
-}
-.blip--4 {
-  left: 38%;
-  top: 70%;
-  animation-delay: 5.4s;
-  background: var(--amber);
-  box-shadow: 0 0 12px 2px rgba(255, 176, 32, 0.5);
-}
-
-@keyframes blip-fade {
-  0%,
-  100% {
-    opacity: 0.12;
-    transform: scale(0.8);
-  }
-  6% {
-    opacity: 1;
-    transform: scale(1.35);
-  }
-  30% {
-    opacity: 0.35;
-    transform: scale(1);
-  }
-}
-
-.hero__monitor {
-  position: absolute;
-  left: 50%;
-  bottom: 10%;
-  transform: translateX(-50%);
-  width: min(84%, 280px);
-  display: grid;
-  gap: 0.3rem;
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius);
-  background: rgba(7, 9, 12, 0.78);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  font-size: 0.72rem;
-  color: var(--ink-dim);
-  letter-spacing: 0.03em;
-}
-
-.hero__monitor-row {
+.nav {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: clamp(1rem, 2.5vw, 1.9rem);
+  font-size: var(--step--1);
 }
 
-/* --- Obecné gridy --- */
+.nav a {
+  text-decoration: none;
+  color: var(--ink-muted);
+}
 
+.nav a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+}
+
+.header__cta {
+  flex-shrink: 0;
+}
+
+@media (max-width: 860px) {
+  .nav {
+    display: none;
+  }
+}
+
+/* ---------- Pásy sekcí ---------- */
+.band {
+  padding-block: clamp(4rem, 9vw, 6.5rem);
+}
+
+.band--sand {
+  background: var(--sand);
+}
+
+.band--sand-light {
+  background: var(--sand-light);
+}
+
+.band--dark {
+  background: var(--green);
+  color: var(--cream);
+}
+
+.band--hero {
+  padding-block: clamp(3rem, 7vw, 5rem) clamp(4rem, 9vw, 6rem);
+}
+
+/* ---------- Hlava sekce ---------- */
+.section-head {
+  max-width: 46rem;
+  margin-bottom: clamp(2.25rem, 5vw, 3.5rem);
+}
+
+.section-head--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--terracotta-deep);
+  margin-bottom: 0.9rem;
+}
+
+.band--dark .eyebrow {
+  color: var(--peach);
+}
+
+.band--sand .eyebrow,
+.band--sand-light .eyebrow {
+  color: var(--terracotta-ink);
+}
+
+.section-head .lead {
+  margin-top: 1.1rem;
+}
+
+.lead {
+  font-size: var(--step-1);
+  line-height: 1.7;
+  color: var(--ink-muted);
+  max-width: 60ch;
+}
+
+.section-head--center .lead {
+  margin-inline: auto;
+}
+
+.band--sand .lead,
+.band--sand-light .lead {
+  color: var(--ink-muted-deep);
+}
+
+.band--dark .lead {
+  color: var(--sand-light);
+}
+
+/* ---------- Mřížky ---------- */
 .grid {
   display: grid;
-  gap: var(--space-3);
+  gap: clamp(1rem, 2.5vw, 1.5rem);
 }
 
 .grid--2 {
   grid-template-columns: repeat(2, 1fr);
 }
+
 .grid--3 {
   grid-template-columns: repeat(3, 1fr);
 }
+
 .grid--4 {
   grid-template-columns: repeat(4, 1fr);
 }
 
 @media (max-width: 980px) {
-  .grid--3,
   .grid--4 {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .grid--3 {
+    grid-template-columns: 1fr;
+  }
 }
 
-@media (max-width: 620px) {
+@media (max-width: 640px) {
   .grid--2,
-  .grid--3,
   .grid--4 {
     grid-template-columns: 1fr;
   }
 }
 
-/* --- Split sekce (text + vizuál) --- */
-
+/* Dvousloupcové sekce (text + obsah) */
 .split {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: var(--space-5);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
   align-items: start;
 }
 
-@media (max-width: 980px) {
+.split .section-head {
+  margin-bottom: 0;
+  position: sticky;
+  top: 6rem;
+}
+
+@media (max-width: 900px) {
   .split {
     grid-template-columns: 1fr;
   }
+
+  .split .section-head {
+    position: static;
+    margin-bottom: 0.5rem;
+  }
 }
 
-/* --- Patička --- */
-
+/* ---------- Patička ---------- */
 .footer {
-  border-top: 1px solid var(--hairline);
-  padding-block: var(--space-4);
-  margin-top: var(--space-5);
+  border-top: 1px solid var(--line);
+  padding-block: 2.25rem;
+  font-size: var(--step--1);
+  color: var(--ink-muted);
 }
 
 .footer__inner {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
-  align-items: center;
   justify-content: space-between;
-  font-size: var(--step--1);
-  color: var(--ink-faint);
-  font-family: var(--font-mono);
+  align-items: center;
+  gap: 1rem;
 }
 
 .footer__links {
   display: flex;
-  gap: var(--space-3);
-}
-
-.footer__links a:hover {
-  color: var(--lime);
+  gap: 1.4rem;
 }
