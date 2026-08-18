@@ -1,0 +1,50 @@
+/* Balíčky: návrh úrovní služby, ne závazný ceník. */
+
+.name {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 500;
+}
+
+.price {
+  margin-top: 0.35rem;
+  color: var(--terracotta-deep);
+  font-weight: 600;
+}
+
+.price small {
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+
+.plan ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: var(--step--1);
+  color: var(--ink-muted);
+}
+
+.plan li {
+  padding-left: 1.4rem;
+  position: relative;
+}
+
+.plan li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.42em;
+  width: 0.62em;
+  height: 0.34em;
+  border-left: 1.5px solid var(--green);
+  border-bottom: 1.5px solid var(--green);
+  transform: rotate(-45deg);
+}
+
+.plan :global(.badge) {
+  margin-bottom: 0.8rem;
+}

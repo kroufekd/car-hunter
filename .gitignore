@@ -7,6 +7,27 @@
 # macOS
 .DS_Store
 
-# Node
+# Závislosti
 node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# Build a cache
+dist/
+*.tsbuildinfo
+
+# Prostředí
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel
+
+# Logy
 npm-debug.log*
+pnpm-debug.log*

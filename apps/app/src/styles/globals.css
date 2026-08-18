@@ -1,0 +1,25 @@
+/* Základní styl aplikace. Vizuální jazyk se přebírá z landing page,
+   až bude jasné, které komponenty jsou sdílené. */
+
+:root {
+  --cream: #f9f6f0;
+  --ink: #2a2620;
+  --ink-muted: #6a6257;
+  --green: #364f3b;
+  --line: rgba(42, 38, 32, 0.14);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}

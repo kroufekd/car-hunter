@@ -1,0 +1,21 @@
+/* Závěrečné CTA na zeleném poli. */
+
+.cta {
+  background: var(--green);
+  color: var(--cream);
+  border-radius: var(--radius-lg);
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 4rem);
+  text-align: center;
+}
+
+.cta :global(.lead) {
+  color: var(--sand-light);
+  margin: 1.2rem auto 2rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+}
