@@ -1,421 +1,180 @@
-/* CarHunter — komponenty: tlačítka, HUD karty, badge, panely, timeline, ceník, FAQ. */
-
-/* --- Tlačítka --- */
-
+/* CarHunter — komponenty: tlačítka, badge, karty, statistiky, kroky, schopnosti. */
+/* ---------- Tlačítka ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.8rem 1.4rem;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: var(--step--1);
-  letter-spacing: 0.02em;
-  border: 1px solid var(--hairline-strong);
-  transition:
-    transform var(--dur-fast) var(--ease),
-    background var(--dur-fast) var(--ease),
-    border-color var(--dur-fast) var(--ease);
-}
-
-.btn:hover {
-  transform: translateY(-2px);
+  gap: 0.5rem;
+  padding: 0.72rem 1.35rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font: 600 var(--step--1) / 1.2 var(--font-body);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .btn--primary {
-  background: var(--lime);
-  color: #05070a;
-  border-color: var(--lime);
-  box-shadow: 0 10px 40px -12px rgba(198, 242, 78, 0.65);
+  background: var(--green);
+  color: var(--cream);
+}
+
+.btn--primary:hover {
+  background: var(--green-deep);
 }
 
 .btn--ghost {
-  background: var(--surface);
+  background: transparent;
+  border-color: var(--line-strong);
   color: var(--ink);
 }
 
 .btn--ghost:hover {
-  border-color: var(--lime);
-  color: var(--lime);
+  background: var(--sand-light);
 }
 
-/* --- HUD karta s rohovými závorkami --- */
-
-.hud {
-  position: relative;
-  background: var(--surface);
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius);
-  padding: var(--space-3);
-  overflow: hidden;
-  transition:
-    border-color var(--dur) var(--ease),
-    background var(--dur) var(--ease),
-    transform var(--dur) var(--ease);
+.band--dark .btn--primary {
+  background: var(--cream);
+  color: var(--green);
 }
 
-.hud::before,
-.hud::after {
-  content: "";
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border: 1px solid var(--lime);
-  opacity: 0.55;
-  transition: opacity var(--dur) var(--ease);
+.band--dark .btn--primary:hover {
+  background: var(--sand-light);
 }
 
-.hud::before {
-  top: 8px;
-  left: 8px;
-  border-right: 0;
-  border-bottom: 0;
+.band--dark .btn--ghost {
+  border-color: var(--line-dark);
+  color: var(--cream);
 }
 
-.hud::after {
-  bottom: 8px;
-  right: 8px;
-  border-left: 0;
-  border-top: 0;
+.band--dark .btn--ghost:hover {
+  background: rgba(249, 246, 240, 0.1);
 }
 
-.hud:hover {
-  border-color: var(--hairline-strong);
-  background: var(--surface-2);
-  transform: translateY(-3px);
-}
-
-.hud:hover::before,
-.hud:hover::after {
-  opacity: 1;
-}
-
-/* Přejíždějící scan-line při hoveru */
-.hud__scan {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: -30%;
-  height: 30%;
-  background: linear-gradient(to bottom, transparent, rgba(198, 242, 78, 0.07), transparent);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.hud:hover .hud__scan {
-  opacity: 1;
-  animation: scan 1.4s var(--ease);
-}
-
-@keyframes scan {
-  to {
-    top: 110%;
-  }
-}
-
-.hud__icon {
-  width: 34px;
-  height: 34px;
-  color: var(--lime);
-  margin-bottom: var(--space-2);
-}
-
-.hud__title {
-  font-family: var(--font-display);
-  font-size: 1.06rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  margin-bottom: 0.35rem;
-}
-
-.hud__body {
-  font-size: var(--step--1);
-  color: var(--ink-dim);
-  line-height: 1.6;
-}
-
-.hud__index {
-  position: absolute;
-  top: var(--space-3);
-  right: var(--space-3);
-  font-family: var(--font-mono);
-  font-size: var(--step--1);
-  color: var(--ink-faint);
-}
-
-/* --- Statistická dlaždice --- */
-
-.stat {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  padding: var(--space-4) var(--space-3);
-}
-
-.stat__value {
-  font-family: var(--font-display);
-  font-size: var(--step-3);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: var(--lime);
-}
-
-.stat__label {
-  font-family: var(--font-mono);
-  font-size: var(--step--1);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-
-.stat__note {
-  font-size: var(--step--1);
-  color: var(--ink-dim);
-}
-
-/* --- Chip / badge --- */
-
-.chip {
+/* ---------- Badge ---------- */
+.badge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.25rem 0.65rem;
+  padding: 0.3rem 0.85rem;
   border-radius: 999px;
-  border: 1px solid var(--hairline);
-  background: var(--surface);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  background: var(--blush);
+  color: var(--terracotta-deep);
+  font-size: var(--step--2);
+  font-weight: 600;
   letter-spacing: 0.06em;
-  color: var(--ink-dim);
-  white-space: nowrap;
+  text-transform: uppercase;
 }
 
-.chip--live {
-  border-color: rgba(198, 242, 78, 0.35);
-  color: var(--lime);
-  background: var(--lime-dim);
+.badge--green {
+  background: rgba(54, 79, 59, 0.1);
+  color: var(--green);
 }
 
-.chip--soon {
-  color: var(--ink-faint);
-  border-style: dashed;
+/* ---------- Karta ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(1.4rem, 3vw, 1.9rem);
 }
 
-.chip--good {
-  color: var(--tone-good);
-  border-color: rgba(198, 242, 78, 0.3);
-}
-.chip--warn {
-  color: var(--tone-warn);
-  border-color: rgba(255, 176, 32, 0.3);
-}
-.chip--bad {
-  color: var(--tone-bad);
-  border-color: rgba(255, 107, 74, 0.3);
+.card--featured {
+  border: 2px solid var(--green);
 }
 
-/* --- Kroky „jak to funguje“ --- */
+/* ---------- Statistika (Problém) ---------- */
+.stat .stat__value {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--step-4);
+  color: var(--green);
+  line-height: 1.05;
+}
 
+.stat .stat__label {
+  font-weight: 600;
+  margin-top: 0.65rem;
+}
+
+.stat .stat__note {
+  color: var(--ink-muted);
+  font-size: var(--step--1);
+  margin-top: 0.45rem;
+}
+
+/* ---------- Kroky (Jak to funguje) ---------- */
 .step {
   position: relative;
-  padding: var(--space-4) var(--space-3) var(--space-3);
-  border-top: 1px solid var(--hairline);
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line-strong);
 }
 
 .step__num {
-  font-family: var(--font-mono);
-  font-size: var(--step--1);
-  color: var(--lime);
-  letter-spacing: 0.2em;
-  position: absolute;
-  top: var(--space-2);
-  left: var(--space-3);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--step-2);
+  color: var(--terracotta-deep);
 }
 
 .step h3 {
-  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: var(--step-2);
 }
 
-.step__body {
+.step p {
+  margin-top: 0.55rem;
+  color: var(--ink-muted);
   font-size: var(--step--1);
-  color: var(--ink-dim);
+  line-height: 1.65;
 }
 
-/* --- Timeline dovozu --- */
-
-.timeline {
-  display: grid;
-  gap: 0;
-  counter-reset: tl;
+.band--sand .step p,
+.band--sand-light .step p {
+  color: var(--ink-muted-deep);
 }
 
-.timeline__item {
-  display: grid;
-  grid-template-columns: 40px 1fr;
-  gap: var(--space-3);
-  padding-block: var(--space-3);
-  border-bottom: 1px dashed var(--hairline);
+/* ---------- Schopnosti ---------- */
+.cap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.timeline__item:last-child {
-  border-bottom: 0;
+.cap__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 
-.timeline__dot {
-  position: relative;
+.cap__icon {
+  width: 2.6rem;
+  height: 2.6rem;
+  flex-shrink: 0;
   display: grid;
   place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--cream);
+  color: var(--green);
 }
 
-.timeline__dot::before {
-  content: "";
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1px solid var(--lime);
-  background: var(--bg);
-  z-index: 1;
+.cap__icon svg {
+  width: 1.35rem;
+  height: 1.35rem;
 }
 
-.timeline__dot::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  bottom: -100%;
-  width: 1px;
-  background: var(--hairline);
+.cap h3 {
+  font-size: 1.18rem;
 }
 
-.timeline__item:last-child .timeline__dot::after {
-  display: none;
-}
-
-.timeline__title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1rem;
-  margin-bottom: 0.2rem;
-}
-
-.timeline__body {
+.cap p {
+  color: var(--ink-muted);
   font-size: var(--step--1);
-  color: var(--ink-dim);
-  margin-bottom: 0.5rem;
+  line-height: 1.62;
 }
 
-/* --- Ceník --- */
-
-.plan {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-4) var(--space-3);
+.cap__status {
+  font-size: 0.69rem;
 }
 
-.plan--featured {
-  border-color: rgba(198, 242, 78, 0.35);
-  background: linear-gradient(180deg, rgba(198, 242, 78, 0.07), var(--surface));
-}
-
-.plan__name {
-  font-family: var(--font-display);
-  font-size: var(--step-1);
-  font-weight: 700;
-}
-
-.plan__price {
-  font-family: var(--font-mono);
-  font-size: var(--step-2);
-  color: var(--lime);
-  line-height: 1;
-}
-
-.plan__price small {
-  font-size: var(--step--1);
-  color: var(--ink-faint);
-}
-
-.plan__list {
-  display: grid;
-  gap: 0.45rem;
-  font-size: var(--step--1);
-  color: var(--ink-dim);
-  margin-top: var(--space-2);
-}
-
-.plan__list li {
-  display: grid;
-  grid-template-columns: 16px 1fr;
-  gap: 0.5rem;
-  align-items: start;
-}
-
-.plan__list li::before {
-  content: "→";
-  color: var(--lime);
-  font-family: var(--font-mono);
-}
-
-/* --- FAQ --- */
-
-.faq details {
-  border-bottom: 1px solid var(--hairline);
-  padding-block: var(--space-3);
-}
-
-.faq summary {
-  cursor: pointer;
-  list-style: none;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: var(--step-1);
-  letter-spacing: -0.01em;
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-3);
-  align-items: center;
-}
-
-.faq summary::-webkit-details-marker {
-  display: none;
-}
-
-.faq summary::after {
-  content: "+";
-  font-family: var(--font-mono);
-  color: var(--lime);
-  font-size: 1.4rem;
-  line-height: 1;
-  flex: none;
-  transition: transform var(--dur) var(--ease);
-}
-
-.faq details[open] summary::after {
-  transform: rotate(45deg);
-}
-
-.faq p {
-  color: var(--ink-dim);
-  font-size: var(--step--1);
-  margin-top: var(--space-2);
-  max-width: 72ch;
-}
-
-/* --- Závěrečné CTA --- */
-
-.cta {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--hairline-strong);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5) var(--space-4);
-  text-align: center;
-  background:
-    radial-gradient(ellipse 70% 120% at 50% 0%, rgba(198, 242, 78, 0.12), transparent 70%),
-    var(--surface);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-3);
-}

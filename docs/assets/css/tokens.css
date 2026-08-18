@@ -1,63 +1,51 @@
-/* CarHunter — design tokeny. Koncept: noční radar / lovecká optika. */
+/* CarHunter — design tokeny. Teplá editorial paleta, žádné gradienty. */
 
 :root {
-  /* Základ */
-  --bg: #07090c;
-  --bg-elev: #0b0e13;
-  --surface: rgba(255, 255, 255, 0.028);
-  --surface-2: rgba(255, 255, 255, 0.05);
-  --hairline: rgba(255, 255, 255, 0.09);
-  --hairline-strong: rgba(255, 255, 255, 0.16);
+  /* Barvy — základ */
+  --cream: #f9f6f0;        /* pozadí stránky */
+  --sand: #e0dace;         /* alternativní pás sekce */
+  --sand-light: #ece7dd;   /* světlejší písková */
+  --card: #fdfcf7;         /* povrch karty */
+  --ink: #2a2620;          /* hlavní text */
+  --ink-muted: #6a6257;    /* tlumený text na krémové */
+  --ink-muted-deep: #5b5449; /* tlumený text na pískové (kontrast 4.5+) */
+  --green: #364f3b;        /* primární akcent — lesní zelená */
+  --green-deep: #2b4030;   /* tmavší zelená (hover) */
+  --terracotta: #bc6f4c;   /* sekundární akcent — jen velké texty */
+  --terracotta-deep: #9a5535; /* terakota pro malý text na krémové (kontrast 4.5+) */
+  --terracotta-ink: #86451f;  /* terakota pro malý text na pískové (kontrast 4.5+) */
+  --peach: #f0b892;        /* kurzíva v nadpisech na tmavém podkladu */
+  --blush: #f5e8e0;        /* podklad badge */
+  --rust: #a03d2d;         /* záporný tón (odchylka nahoru) */
+  --sage: #5d7355;         /* doplňková zeleň pro ilustrace */
 
-  /* Text */
-  --ink: #eef2f6;
-  --ink-dim: #9aa4b2;
-  --ink-faint: #5f6b7a;
+  /* Linky a okraje */
+  --line: rgba(42, 38, 32, 0.14);
+  --line-strong: rgba(42, 38, 32, 0.26);
+  --line-dark: rgba(249, 246, 240, 0.22);
 
-  /* Akcenty */
-  --lime: #c6f24e;
-  --lime-dim: rgba(198, 242, 78, 0.14);
-  --cyan: #6ee7ff;
-  --cyan-dim: rgba(110, 231, 255, 0.14);
-  --violet: #8b5cf6;
-  --amber: #ffb020;
-  --coral: #ff6b4a;
+  /* Písma */
+  --font-display: "Erode", Georgia, "Times New Roman", serif;
+  --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* Sémantika odchylek */
-  --tone-good: var(--lime);
-  --tone-warn: var(--amber);
-  --tone-bad: var(--coral);
+  /* Typografická škála */
+  --step-5: clamp(2.6rem, 1.5rem + 4.6vw, 4.4rem);
+  --step-4: clamp(2rem, 1.35rem + 2.7vw, 3.05rem);
+  --step-3: clamp(1.5rem, 1.22rem + 1.2vw, 1.95rem);
+  --step-2: clamp(1.25rem, 1.14rem + 0.5vw, 1.45rem);
+  --step-1: clamp(1.05rem, 1rem + 0.25vw, 1.17rem);
+  --step-0: 1rem;
+  --step--1: 0.885rem;
+  --step--2: 0.775rem;
 
-  /* Typografie */
-  --font-display: "Space Grotesk", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  /* Rozměry */
+  --container: 71rem;
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --radius-lg: 26px;
+  --radius: 18px;
+  --radius-sm: 10px;
 
-  --step--1: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);
-  --step-0: clamp(0.95rem, 0.92rem + 0.15vw, 1.05rem);
-  --step-1: clamp(1.15rem, 1.05rem + 0.4vw, 1.4rem);
-  --step-2: clamp(1.5rem, 1.3rem + 0.9vw, 2.1rem);
-  --step-3: clamp(2rem, 1.5rem + 2.2vw, 3.4rem);
-  --step-4: clamp(2.6rem, 1.6rem + 4.4vw, 5.8rem);
-
-  /* Rozestupy */
-  --space-1: 0.375rem;
-  --space-2: 0.75rem;
-  --space-3: 1.25rem;
-  --space-4: 2rem;
-  --space-5: 3.25rem;
-  --space-6: 5rem;
-  --space-7: 8rem;
-
-  /* Tvary */
-  --radius-sm: 6px;
-  --radius: 12px;
-  --radius-lg: 20px;
-  --container: 1180px;
-
-  /* Pohyb */
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --dur-fast: 180ms;
-  --dur: 420ms;
-  --dur-slow: 900ms;
+  /* Stín — jen velmi měkký */
+  --shadow-soft: 0 1px 2px rgba(42, 38, 32, 0.05), 0 8px 28px rgba(42, 38, 32, 0.05);
 }

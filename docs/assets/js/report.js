@@ -1,114 +1,158 @@
-/* CarHunter — vykreslení reálného denního reportu z window.CARHUNTER_REPORT. */
-
-(function initReport() {
+// Render sekce „Reálný report" z window.CARHUNTER_REPORT (assets/data/report.js).
+// Vše se staví přes DOM API a textContent — bez innerHTML nad daty.
+(function () {
   "use strict";
 
-  var root = document.querySelector("[data-report]");
+  const root = document.querySelector("[data-report]");
   if (!root) return;
 
-  var data = window.CARHUNTER_REPORT;
-  if (!data || !Array.isArray(data.groups) || data.groups.length === 0) {
-    root.textContent = "Report se nepodařilo načíst.";
+  const data = window.CARHUNTER_REPORT;
+  if (!data || !data.meta || !Array.isArray(data.groups) || data.groups.length === 0) {
+    const fallback = document.createElement("p");
+    fallback.className = "report__fallback";
+    fallback.textContent =
+      "Data reportu se nepodařilo načíst. Kompletní report je v repozitáři ve složce concept/.";
+    root.appendChild(fallback);
     return;
   }
 
-  var tabsEl = root.querySelector("[data-report-tabs]");
-  var listEl = root.querySelector("[data-report-list]");
-  var metaEl = root.querySelector("[data-report-meta]");
-  var tldrEl = root.querySelector("[data-report-tldr]");
-  var footEl = root.querySelector("[data-report-foot]");
-
-  var FLAGS = { CZ: "🇨🇿", DE: "🇩🇪", AT: "🇦🇹", NL: "🇳🇱" };
-
-  function el(tag, className, text) {
-    var node = document.createElement(tag);
+  const el = (tag, className, text) => {
+    const node = document.createElement(tag);
     if (className) node.className = className;
     if (text !== undefined && text !== null) node.textContent = text;
     return node;
-  }
+  };
 
-  function renderMeta() {
-    if (metaEl) metaEl.textContent = data.meta.date + " · " + data.meta.subtitle;
-    if (tldrEl) {
-      tldrEl.appendChild(el("b", null, "Krátká verze: "));
-      tldrEl.appendChild(document.createTextNode(data.meta.tldr));
+  const setText = (selector, value) => {
+    const node = root.querySelector(selector);
+    if (node && value) node.textContent = value;
+  };
+
+  const formatDate = (iso) => {
+    const parts = typeof iso === "string" ? iso.split("-") : [];
+    if (parts.length !== 3) return iso || "";
+    return `${Number(parts[2])}. ${Number(parts[1])}. ${parts[0]}`;
+  };
+
+  const formatCzk = (value) => {
+    const match = typeof value === "string" ? value.match(/^(\d+)k$/) : null;
+    return match ? `${match[1]} 000 Kč` : value || "";
+  };
+
+  const buildMetaLine = (listing) => {
+    const meta = el("p", "listing__meta");
+    if (listing.country) meta.appendChild(el("span", "listing__country", listing.country));
+    const bits = [listing.dealer, listing.distance, listing.rating ? `★ ${listing.rating}` : null]
+      .filter(Boolean)
+      .join(" · ");
+    meta.appendChild(document.createTextNode(bits));
+    return meta;
+  };
+
+  const buildListing = (listing) => {
+    const card = el("article", "listing");
+    const top = el("div", "listing__top");
+
+    const score = el("span", "listing__score", String(listing.score ?? "–"));
+    score.setAttribute("role", "img");
+    score.setAttribute("aria-label", `Skóre ${listing.score ?? "neznámé"} z 10`);
+    top.appendChild(score);
+
+    const head = el("div", "listing__head");
+    head.appendChild(el("h4", "listing__title", listing.title || "Bez titulku"));
+    head.appendChild(buildMetaLine(listing));
+    top.appendChild(head);
+
+    if (listing.delta) {
+      const delta = el("span", `listing__delta delta--${listing.deltaTone || "warn"}`, listing.delta);
+      delta.appendChild(el("small", null, "vs. benchmark"));
+      top.appendChild(delta);
     }
-    if (footEl) {
-      footEl.appendChild(el("span", null, data.meta.footer));
-      footEl.appendChild(el("span", null, data.meta.importNote));
+    card.appendChild(top);
+
+    if (listing.badge) card.appendChild(el("p", "badge listing__badge", listing.badge));
+
+    if (Array.isArray(listing.tags) && listing.tags.length > 0) {
+      const tags = el("ul", "listing__tags");
+      listing.tags.forEach((tag) => tags.appendChild(el("li", null, tag)));
+      card.appendChild(tags);
     }
-  }
 
-  function renderListing(item) {
-    var row = el("article", "listing");
+    if (listing.note) card.appendChild(el("p", "listing__note", listing.note));
 
-    var score = el("div", "listing__score");
-    score.style.setProperty("--score", String(item.score));
-    score.setAttribute("data-score", String(item.score));
-    score.setAttribute("aria-label", "Skóre " + item.score + " z 10");
-    row.appendChild(score);
+    const foot = el("footer", "listing__foot");
+    const price = el("p", "listing__price", formatCzk(listing.priceCzk));
+    if (listing.priceEur) price.appendChild(el("small", null, listing.priceEur));
+    foot.appendChild(price);
 
-    var main = el("div", "listing__main");
+    if (listing.url) {
+      const link = el("a", "listing__link", "Otevřít inzerát");
+      link.href = listing.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.insertAdjacentHTML(
+        "beforeend",
+        '<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      );
+      foot.appendChild(link);
+    }
+    card.appendChild(foot);
+    return card;
+  };
 
-    var link = el("a", "listing__name", item.title);
-    link.href = item.url;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    main.appendChild(link);
+  // Meta texty
+  setText("[data-report-date]", `Doručeno ${formatDate(data.meta.date)} · 08:00`);
+  setText("[data-report-title]", data.meta.title);
+  setText("[data-report-subtitle]", data.meta.subtitle);
+  setText("[data-report-tldr]", data.meta.tldr);
+  setText("[data-report-plan]", data.meta.plan);
+  setText("[data-report-import]", data.meta.importNote);
+  setText("[data-report-foot]", data.meta.footer);
 
-    var meta = el("div", "listing__meta");
-    meta.appendChild(el("span", "listing__flag", FLAGS[item.country] || ""));
-    meta.appendChild(el("span", null, item.dealer));
-    meta.appendChild(el("b", null, item.distance));
-    if (item.rating) meta.appendChild(el("span", null, "★ " + item.rating));
-    main.appendChild(meta);
+  // Skupiny: přepínač + panely
+  const tabsHost = root.querySelector("[data-report-tabs]");
+  const panelsHost = root.querySelector("[data-report-panels]");
+  if (!tabsHost || !panelsHost) return;
 
-    if (item.note) main.appendChild(el("p", "listing__note", item.note));
+  const tabs = [];
+  const panels = [];
 
-    var tags = el("div", "listing__tags");
-    if (item.badge) tags.appendChild(el("span", "chip chip--live", item.badge));
-    (item.tags || []).forEach(function (tag) {
-      tags.appendChild(el("span", "chip", tag));
+  const selectTab = (index) => {
+    tabs.forEach((tab, i) => {
+      const active = i === index;
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      panels[i].hidden = !active;
     });
-    if (tags.childElementCount > 0) main.appendChild(tags);
+  };
 
-    row.appendChild(main);
-
-    var price = el("div", "listing__price");
-    price.appendChild(el("span", "listing__czk", item.priceCzk));
-    if (item.priceEur) price.appendChild(el("span", "listing__eur", item.priceEur));
-    price.appendChild(el("span", "chip chip--" + (item.deltaTone || "warn"), item.delta + " vs kámoši"));
-    row.appendChild(price);
-
-    return row;
-  }
-
-  function showGroup(index) {
-    listEl.replaceChildren();
-    data.groups[index].listings.forEach(function (item) {
-      listEl.appendChild(renderListing(item));
+  data.groups.forEach((group, index) => {
+    const tab = el("button", "report__tab", group.label || group.id);
+    tab.type = "button";
+    tab.id = `report-tab-${group.id}`;
+    tab.setAttribute("role", "tab");
+    tab.setAttribute("aria-controls", `report-panel-${group.id}`);
+    tab.appendChild(el("span", "count", String(group.count ?? group.listings.length)));
+    tab.addEventListener("click", () => selectTab(index));
+    tab.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+      event.preventDefault();
+      const shift = event.key === "ArrowRight" ? 1 : -1;
+      const next = (index + shift + tabs.length) % tabs.length;
+      selectTab(next);
+      tabs[next].focus();
     });
+    tabs.push(tab);
+    tabsHost.appendChild(tab);
 
-    Array.prototype.forEach.call(tabsEl.children, function (tab, i) {
-      tab.setAttribute("aria-selected", String(i === index));
-    });
-  }
+    const panel = el("div", "report__list");
+    panel.id = `report-panel-${group.id}`;
+    panel.setAttribute("role", "tabpanel");
+    panel.setAttribute("aria-labelledby", tab.id);
+    (group.listings || []).forEach((listing) => panel.appendChild(buildListing(listing)));
+    panels.push(panel);
+    panelsHost.appendChild(panel);
+  });
 
-  function renderTabs() {
-    data.groups.forEach(function (group, i) {
-      var tab = el("button", "tab");
-      tab.type = "button";
-      tab.setAttribute("role", "tab");
-      tab.appendChild(document.createTextNode(group.label));
-      tab.appendChild(el("span", null, "· " + group.count));
-      tab.addEventListener("click", function () {
-        showGroup(i);
-      });
-      tabsEl.appendChild(tab);
-    });
-  }
-
-  renderMeta();
-  renderTabs();
-  showGroup(0);
+  selectTab(0);
 })();

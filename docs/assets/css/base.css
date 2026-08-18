@@ -1,4 +1,4 @@
-/* CarHunter — reset, základní typografie, utility. */
+/* CarHunter — reset, typografie, odkazy, přístupnost. */
 
 *,
 *::before,
@@ -6,127 +6,144 @@
   box-sizing: border-box;
 }
 
+* {
+  margin: 0;
+}
+
 html {
   scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
-  margin: 0;
-  background: var(--bg);
+  background: var(--cream);
   color: var(--ink);
   font-family: var(--font-body);
   font-size: var(--step-0);
   line-height: 1.65;
-  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  margin: 0;
-  text-wrap: balance;
-}
-
-h1 {
-  font-size: var(--step-4);
-}
-h2 {
-  font-size: var(--step-3);
-}
-h3 {
-  font-size: var(--step-1);
-  letter-spacing: -0.02em;
-}
-
-p {
-  margin: 0;
-  text-wrap: pretty;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  overflow-x: clip;
 }
 
 img,
-svg,
-canvas {
+svg {
   display: block;
   max-width: 100%;
 }
 
-button {
-  font: inherit;
-  color: inherit;
-  background: none;
-  border: 0;
-  cursor: pointer;
+/* Nadpisy — Erode, weight 500 */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+  text-wrap: balance;
 }
 
-::selection {
-  background: var(--lime);
-  color: #05070a;
+h1 {
+  font-size: var(--step-5);
+}
+
+h2 {
+  font-size: var(--step-4);
+}
+
+h3 {
+  font-size: var(--step-2);
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Podpis stylu: část nadpisu v kurzívě a teplém akcentu */
+.hl {
+  font-style: italic;
+  color: var(--terracotta);
+}
+
+.on-dark .hl,
+.band--dark .hl {
+  color: var(--peach);
+}
+
+/* Na pískovém podkladu tmavší terakota kvůli kontrastu */
+.band--sand .hl,
+.band--sand-light .hl {
+  color: var(--terracotta-deep);
+}
+
+/* Odkazy v textu: tenké podtržení */
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: var(--line-strong);
+  transition: text-decoration-color 160ms ease;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
 }
 
 :focus-visible {
-  outline: 2px solid var(--lime);
+  outline: 2px solid var(--green);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
-/* --- Utility --- */
-
-.mono {
-  font-family: var(--font-mono);
-  font-variant-ligatures: none;
+.band--dark :focus-visible {
+  outline-color: var(--peach);
 }
 
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: var(--step--1);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
+::selection {
+  background: var(--peach);
+  color: var(--ink);
 }
 
-.eyebrow::before {
-  content: "";
-  width: 22px;
-  height: 1px;
-  background: var(--lime);
-  flex: none;
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--green);
+  color: var(--cream);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: top 160ms ease;
 }
 
-.lead {
-  font-size: var(--step-1);
-  color: var(--ink-dim);
-  line-height: 1.55;
-  max-width: 62ch;
+.skip-link:focus-visible {
+  top: 1rem;
 }
 
+/* Pomocné třídy */
 .muted {
-  color: var(--ink-dim);
+  color: var(--ink-muted);
 }
 
-.accent {
-  color: var(--lime);
+.band--sand .muted,
+.band--sand-light .muted {
+  color: var(--ink-muted-deep);
+}
+
+.band--dark .muted {
+  color: var(--sand);
+}
+
+.small {
+  font-size: var(--step--1);
 }
 
 .visually-hidden {
@@ -136,23 +153,20 @@ button {
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
 }
 
-.skip-link {
-  position: absolute;
-  left: var(--space-3);
-  top: -100px;
-  z-index: 100;
-  background: var(--lime);
-  color: #05070a;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  transition: top var(--dur-fast) var(--ease);
-}
+/* Decentní fade-in při scrollu — jen pokud uživatel nemá redukovaný pohyb */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 600ms ease, transform 600ms ease;
+  }
 
-.skip-link:focus {
-  top: var(--space-3);
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
 }
