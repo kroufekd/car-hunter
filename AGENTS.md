@@ -1,10 +1,29 @@
 # AGENTS.md
 
-**CarHunter** — koncept AI agenta pro hledání ojetého auta napříč inzeráty v ČR i v Evropě, plus pitch landing page. Aplikace samotná se v tomhle repu nestaví.
+**CarHunter** — AI agent pro koupi ojetého auta. Monorepo: veřejná landing page a produktová aplikace.
 
-Kontext produktu: `README.md` a složka `concept/`.
+| Kde | Co |
+| --- | --- |
+| `apps/landing` | veřejná pitch page (Next.js, staticky předrenderovaná) |
+| `apps/app` | produktová aplikace (Next.js, zatím kostra) |
+| `concept/` | produktová dokumentace — vize, schopnosti agenta, architektura, dovoz, roadmapa |
+| `docs/adr/` | architektonická rozhodnutí |
+| `docs/agents/` | konfigurace pro engineering skills |
 
-> **Pozor na `docs/`.** V tomhle repu `docs/` **není** interní dokumentace — je to publikační adresář GitHub Pages. Všechno pod ním se servíruje na `https://kroufekd.github.io/car-hunter/`. Landing page žije v `docs/index.html` + `docs/assets/`.
+Samotný monitor inzerátů (crawler, DB, scoring, rozesílání reportů) v repu **není** — běží zatím jako soukromý prototyp.
+
+## Práce s repem
+
+```bash
+pnpm install
+pnpm dev:landing    # http://localhost:3000
+pnpm dev:app        # http://localhost:3001
+pnpm build          # obě aplikace
+pnpm typecheck
+pnpm lint
+```
+
+Package manager je **pnpm** (workspaces). Node ≥ 20.
 
 ## Agent skills
 
@@ -18,4 +37,4 @@ Kanonická pětice bez přejmenování — `needs-triage`, `needs-info`, `ready-
 
 ### Domain docs
 
-Single-context — `CONTEXT.md` v kořeni, ADR v `docs/adr/`, produktová dokumentace v `concept/`. See `docs/agents/domain.md`.
+Multi-context — `CONTEXT-MAP.md` v kořeni ukazuje na `apps/*/CONTEXT.md`. See `docs/agents/domain.md`.

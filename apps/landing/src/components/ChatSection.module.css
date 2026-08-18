@@ -1,0 +1,62 @@
+/* Komunikace: ukázková výměna zpráv mezi agentem a dealerem. */
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.note {
+  align-self: center;
+  text-align: center;
+  font-size: var(--step--2);
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  max-width: 40ch;
+}
+
+.msg {
+  max-width: 78%;
+  padding: 0.85rem 1.1rem;
+  border-radius: var(--radius);
+  font-size: var(--step--1);
+  line-height: 1.6;
+}
+
+.msgAgent {
+  align-self: flex-end;
+  background: var(--green);
+  color: var(--cream);
+  border-bottom-right-radius: 6px;
+}
+
+.msgDealer {
+  align-self: flex-start;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 6px;
+}
+
+.who {
+  display: block;
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+  opacity: 0.75;
+}
+
+.result {
+  margin-top: 0.4rem;
+  border: 1px dashed var(--terracotta);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  font-size: var(--step--1);
+  color: var(--ink-muted-deep);
+  background: var(--blush);
+}
+
+.disclaimer {
+  margin-top: 1rem;
+}

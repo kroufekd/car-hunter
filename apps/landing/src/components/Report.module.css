@@ -1,0 +1,301 @@
+/* CarHunter — sekce „Reálný report": ranní e-mail na off-white papíře. */
+
+.report {
+  background: var(--card);
+  color: var(--ink);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  max-width: 56rem;
+  margin-inline: auto;
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding: 1rem clamp(1.25rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--line);
+  background: var(--sand-light);
+  font-size: var(--step--1);
+  color: var(--ink-muted-deep);
+}
+
+.bar strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.body {
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--step-3);
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin-top: 0.6rem;
+  color: var(--ink-muted);
+  font-size: var(--step--1);
+}
+
+.tldr {
+  margin-top: 1.4rem;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.3rem;
+  font-size: var(--step--1);
+  line-height: 1.65;
+}
+
+.tldr strong {
+  display: block;
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--terracotta-deep);
+  margin-bottom: 0.4rem;
+}
+
+.plan {
+  margin-top: 0.9rem;
+  color: var(--ink-muted);
+  font-size: var(--step--1);
+  line-height: 1.65;
+}
+
+/* Přepínač skupin */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.6rem;
+}
+
+.tab {
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink-muted-deep);
+  border-radius: 999px;
+  padding: 0.5rem 1.05rem;
+  font: 600 var(--step--1) / 1.2 var(--font-body);
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.tab:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.tab[aria-selected="true"] {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--cream);
+}
+
+.tab .count {
+  font-weight: 400;
+  opacity: 0.75;
+  margin-left: 0.3rem;
+}
+
+/* Seznam inzerátů */
+.list {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.list[hidden] {
+  display: none;
+}
+
+.listing {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.15rem 1.3rem;
+  background: var(--card);
+}
+
+.listingTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.listingScore {
+  flex-shrink: 0;
+  width: 2.7rem;
+  height: 2.7rem;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--green);
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.15rem;
+  color: var(--green);
+}
+
+.listingHead {
+  flex: 1;
+  min-width: 0;
+}
+
+.listingTitle {
+  font-weight: 600;
+  font-size: var(--step-0);
+  line-height: 1.45;
+}
+
+.listingMeta {
+  margin-top: 0.3rem;
+  font-size: var(--step--1);
+  color: var(--ink-muted);
+}
+
+.listingCountry {
+  display: inline-block;
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--line-strong);
+  border-radius: 5px;
+  padding: 0 0.35rem;
+  margin-right: 0.45rem;
+  color: var(--ink-muted-deep);
+}
+
+.listingDelta {
+  flex-shrink: 0;
+  text-align: right;
+  font-size: var(--step--1);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.listingDelta small {
+  display: block;
+  font-weight: 400;
+  color: var(--ink-muted);
+  font-size: var(--step--2);
+}
+
+.deltaGood {
+  color: var(--green);
+}
+
+.deltaWarn {
+  color: var(--terracotta-deep);
+}
+
+.deltaBad {
+  color: var(--rust);
+}
+
+.listingBadge {
+  margin: 0.7rem 0 0;
+}
+
+.listingTags {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.listingTags li {
+  font-size: var(--step--2);
+  color: var(--ink-muted-deep);
+  background: var(--sand-light);
+  border-radius: 999px;
+  padding: 0.18rem 0.65rem;
+}
+
+.listingNote {
+  margin-top: 0.75rem;
+  font-size: var(--step--1);
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.listingFoot {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem 1.2rem;
+}
+
+.listingPrice {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--step-2);
+  color: var(--ink);
+}
+
+.listingPrice small {
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  color: var(--ink-muted);
+  margin-left: 0.5rem;
+}
+
+.listingLink {
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--green);
+  text-decoration-color: var(--green);
+}
+
+.listingLink svg {
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  margin-left: 0.28em;
+  vertical-align: baseline;
+}
+
+/* Poznámka k dovozu + patička reportu */
+.importNote {
+  margin-top: 1.4rem;
+}
+
+.foot {
+  margin-top: 1.3rem;
+  font-size: var(--step--2);
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+.fallback {
+  margin-top: 1.4rem;
+  color: var(--ink-muted);
+  font-size: var(--step--1);
+}
+
+@media (max-width: 560px) {
+  .listingTop {
+    flex-wrap: wrap;
+  }
+
+  .listingDelta {
+    text-align: left;
+    width: 100%;
+    order: 3;
+  }
+}

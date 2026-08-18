@@ -1,0 +1,47 @@
+/* Otázky: rozbalovací seznam. */
+
+.faq {
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+.faq details {
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.faq summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.15rem 0.2rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--step-2);
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: "+";
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--terracotta-deep);
+  font-size: 1.3rem;
+  line-height: 1;
+  transition: transform 200ms ease;
+}
+
+.faq details[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.faq details p {
+  padding: 0 0.2rem 1.3rem;
+  color: var(--ink-muted-deep);
+  max-width: 62ch;
+}
