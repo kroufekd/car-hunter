@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <title>OG</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/tokens.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+      .og {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        background: #07090c;
+        overflow: hidden;
+        font-family: var(--font-display);
+        color: #eef2f6;
+      }
+      .og__blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        mix-blend-mode: screen;
+      }
+      .b1 {
+        width: 620px;
+        height: 620px;
+        left: -100px;
+        top: -160px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.85), transparent 68%);
+      }
+      .b2 {
+        width: 520px;
+        height: 520px;
+        right: -60px;
+        top: -120px;
+        background: radial-gradient(circle, rgba(110, 231, 255, 0.65), transparent 68%);
+      }
+      .b3 {
+        width: 480px;
+        height: 480px;
+        left: 380px;
+        bottom: -220px;
+        background: radial-gradient(circle, rgba(198, 242, 78, 0.5), transparent 66%);
+      }
+      .og__grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 60px 60px;
+        -webkit-mask-image: radial-gradient(ellipse 90% 70% at 40% 40%, #000 20%, transparent 80%);
+      }
+      .og__vig {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, rgba(7, 9, 12, 0.86), rgba(7, 9, 12, 0.35));
+      }
+      .og__inner {
+        position: relative;
+        padding: 68px 72px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-sizing: border-box;
+      }
+      .og__brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 28px;
+        font-weight: 700;
+      }
+      .og__kicker {
+        font-family: var(--font-mono);
+        font-size: 17px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: #7f8b9a;
+        margin-bottom: 18px;
+      }
+      .og__title {
+        font-size: 88px;
+        font-weight: 700;
+        line-height: 0.98;
+        letter-spacing: -0.045em;
+        margin: 0;
+      }
+      .og__title em {
+        font-style: normal;
+        color: #c6f24e;
+      }
+      .og__sub {
+        margin-top: 22px;
+        font-family: var(--font-mono);
+        font-size: 21px;
+        color: #9aa4b2;
+      }
+      .og__stats {
+        display: flex;
+        gap: 56px;
+        font-family: var(--font-mono);
+        font-size: 15px;
+        color: #5f6b7a;
+        letter-spacing: 0.06em;
+      }
+      .og__stats b {
+        display: block;
+        font-family: var(--font-display);
+        font-size: 40px;
+        color: #eef2f6;
+        letter-spacing: -0.03em;
+      }
+      .og__radar {
+        position: absolute;
+        right: -90px;
+        top: 90px;
+        width: 460px;
+        height: 460px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background:
+          radial-gradient(circle, transparent 0 24%, rgba(198, 242, 78, 0.16) 24% 25%, transparent 25%),
+          radial-gradient(circle, transparent 0 48%, rgba(198, 242, 78, 0.12) 48% 49%, transparent 49%),
+          conic-gradient(
+            from 210deg,
+            rgba(198, 242, 78, 0) 0deg,
+            rgba(198, 242, 78, 0) 280deg,
+            rgba(198, 242, 78, 0.18) 350deg,
+            rgba(198, 242, 78, 0.4) 360deg
+          );
+        -webkit-mask-image: radial-gradient(circle, #000 14%, rgba(0, 0, 0, 0.6) 55%, transparent 78%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="og">
+      <span class="og__blob b1"></span>
+      <span class="og__blob b2"></span>
+      <span class="og__blob b3"></span>
+      <div class="og__grid"></div>
+      <div class="og__radar"></div>
+      <div class="og__vig"></div>
+      <div class="og__inner">
+        <div class="og__brand">
+          <svg width="38" height="38" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="19" fill="none" stroke="#eef2f6" stroke-width="2" opacity=".4" />
+            <circle cx="32" cy="32" r="10" fill="none" stroke="#c6f24e" stroke-width="2" opacity=".55" />
+            <path d="M32 6v9M32 49v9M6 32h9M49 32h9" stroke="#c6f24e" stroke-width="2" stroke-linecap="round" />
+            <path d="M22 36h20l-3-6H25l-3 6z" fill="#c6f24e" />
+            <circle cx="26" cy="38" r="2.4" fill="#c6f24e" />
+            <circle cx="38" cy="38" r="2.4" fill="#c6f24e" />
+          </svg>
+          CarHunter
+        </div>
+
+        <div>
+          <p class="og__kicker">AI agent · loví 24/7 · ČR + Evropa</p>
+          <h1 class="og__title">Auto si<br /><em>najde tebe.</em></h1>
+          <p class="og__sub">272 inzerátů v DB → 12 kusů, kam volat. Každý den v 8:00.</p>
+        </div>
+
+        <div class="og__stats">
+          <div><b>272</b>aktivních v DB</div>
+          <div><b>3</b>napojené trhy</div>
+          <div><b>104k</b>rozdíl ČR vs. DE</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

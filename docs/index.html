@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CarHunter — AI agent, který ti najde auto</title>
+    <meta
+      name="description"
+      content="Napíšeš specifikaci, CarHunter loví inzeráty v ČR i v Evropě, doptá se prodejce na to, co chybí, prověří VIN a fotky a v 8:00 ti pošle seznam aut, na která má smysl volat."
+    />
+    <meta name="theme-color" content="#07090c" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="CarHunter — AI agent, který ti najde auto" />
+    <meta
+      property="og:description"
+      content="272 inzerátů v databázi, 12 kusů, kam má smysl volat. Report každý den v 8:00."
+    />
+    <meta property="og:image" content="https://kroufekd.github.io/car-hunter/assets/og.png" />
+    <meta property="og:locale" content="cs_CZ" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="assets/css/tokens.css" />
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/effects.css" />
+    <link rel="stylesheet" href="assets/css/layout.css" />
+    <link rel="stylesheet" href="assets/css/components.css" />
+    <link rel="stylesheet" href="assets/css/report.css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#obsah">Přeskočit na obsah</a>
+
+    <!-- Vrstvy pozadí: mesh gradient, AI síť, mřížka, vinětace, zrno -->
+    <div class="bg" aria-hidden="true">
+      <div class="bg__mesh">
+        <span class="bg__blob bg__blob--a"></span>
+        <span class="bg__blob bg__blob--b"></span>
+        <span class="bg__blob bg__blob--c"></span>
+        <span class="bg__blob bg__blob--d"></span>
+        <span class="bg__blob bg__blob--e"></span>
+      </div>
+      <canvas class="bg__canvas" data-mesh></canvas>
+      <div class="bg__grid"></div>
+      <div class="bg__vignette"></div>
+      <div class="bg__grain"></div>
+    </div>
+
+    <div class="page">
+      <header class="nav">
+        <div class="container nav__inner">
+          <a class="logo" href="#">
+            <svg class="logo__mark" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="32" r="19" fill="none" stroke="currentColor" stroke-width="2" opacity=".45" />
+              <circle cx="32" cy="32" r="10" fill="none" stroke="#c6f24e" stroke-width="2" opacity=".5" />
+              <path d="M32 6v9M32 49v9M6 32h9M49 32h9" stroke="#c6f24e" stroke-width="2" stroke-linecap="round" />
+              <path d="M22 36h20l-3-6H25l-3 6z" fill="#c6f24e" />
+              <circle cx="26" cy="38" r="2.4" fill="#c6f24e" />
+              <circle cx="38" cy="38" r="2.4" fill="#c6f24e" />
+            </svg>
+            <span>CarHunter</span>
+          </a>
+          <nav class="nav__links" aria-label="Hlavní">
+            <a href="#jak">Jak to funguje</a>
+            <a href="#umi">Co agent umí</a>
+            <a href="#report">Reálný report</a>
+            <a href="#dovoz">Dovoz</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="obsah">
+        <!-- ============ HERO ============ -->
+        <section class="container hero">
+          <div class="hero__copy">
+            <p class="eyebrow">AI agent · loví 24/7 · ČR + Evropa</p>
+            <h1 class="hero__title">
+              <span>Auto si</span>
+              <span class="accent">najde tebe.</span>
+            </h1>
+            <p class="lead">
+              Napíšeš specifikaci. CarHunter prochází inzeráty v Česku i v Evropě, doptá se prodejce na to, co
+              v inzerátu chybí, prověří VIN i fotky — a v 8:00 ti pošle krátký seznam aut, na která má smysl volat.
+            </p>
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="#report">Ukázat reálný report</a>
+              <a class="btn btn--ghost" href="#jak">Jak to funguje</a>
+            </div>
+            <div class="hero__facts">
+              <div class="hero__fact">
+                <strong data-count-to="272">272</strong>
+                aktivních v DB
+              </div>
+              <div class="hero__fact">
+                <strong>3</strong>
+                napojené trhy
+              </div>
+              <div class="hero__fact">
+                <strong>08:00</strong>
+                report každý den
+              </div>
+              <div class="hero__fact">
+                <strong>0</strong>
+                ručních refreshů
+              </div>
+            </div>
+          </div>
+
+          <div class="hero__visual" aria-hidden="true">
+            <div class="hero__radar">
+              <div class="radar"></div>
+              <div class="radar__rings"></div>
+              <span class="blip blip--1"></span>
+              <span class="blip blip--2"></span>
+              <span class="blip blip--3"></span>
+              <span class="blip blip--4"></span>
+              <div class="hero__monitor mono">
+                <div class="hero__monitor-row"><span class="pulse"></span> monitor běží</div>
+                <div class="hero__monitor-row">mobile.de · 41 nových</div>
+                <div class="hero__monitor-row">sauto.cz · 12 nových</div>
+                <div class="hero__monitor-row accent">3 shody se specifikací</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ ZDROJE ============ -->
+        <section class="container section--tight">
+          <div class="marquee">
+            <ul class="marquee__track">
+              <li class="chip chip--live">sauto.cz · napojeno</li>
+              <li class="chip chip--live">bazoš · napojeno</li>
+              <li class="chip chip--live">mobile.de · napojeno</li>
+              <li class="chip chip--soon">AutoScout24</li>
+              <li class="chip chip--soon">tipcars</li>
+              <li class="chip chip--soon">mobile.at</li>
+              <li class="chip chip--soon">Marktplaats</li>
+              <li class="chip chip--soon">Carvago</li>
+              <li class="chip chip--live" aria-hidden="true">sauto.cz · napojeno</li>
+              <li class="chip chip--live" aria-hidden="true">bazoš · napojeno</li>
+              <li class="chip chip--live" aria-hidden="true">mobile.de · napojeno</li>
+              <li class="chip chip--soon" aria-hidden="true">AutoScout24</li>
+              <li class="chip chip--soon" aria-hidden="true">tipcars</li>
+              <li class="chip chip--soon" aria-hidden="true">mobile.at</li>
+              <li class="chip chip--soon" aria-hidden="true">Marktplaats</li>
+              <li class="chip chip--soon" aria-hidden="true">Carvago</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- ============ PROBLÉM ============ -->
+        <section class="container section">
+          <div class="section__head" data-reveal>
+            <p class="eyebrow">Problém</p>
+            <h2>Hledání auta je práce na plný úvazek.</h2>
+            <p class="lead">
+              Dobré kusy zmizí za pár hodin. Polovina toho, co potřebuješ vědět, v inzerátu není. A když už to
+              najdeš, zjistíš, že o 200 km dál stálo stejné auto o sto tisíc míň.
+            </p>
+          </div>
+          <div class="grid grid--3">
+            <div class="hud stat" data-reveal>
+              <span class="hud__scan"></span>
+              <span class="stat__value" data-count-to="272">272</span>
+              <span class="stat__label">inzerátů na jednu specifikaci</span>
+              <span class="stat__note">Tesla Model 3, ČR + Německo, jeden běžící monitor.</span>
+            </div>
+            <div class="hud stat" data-reveal>
+              <span class="hud__scan"></span>
+              <span class="stat__value">6 týdnů</span>
+              <span class="stat__label">ručního refreshování</span>
+              <span class="stat__note">Než člověk projde všechny bazary, ty dobré kusy jsou pryč.</span>
+            </div>
+            <div class="hud stat" data-reveal>
+              <span class="hud__scan"></span>
+              <span class="stat__value"><span data-count-to="104000">104 000</span> Kč</span>
+              <span class="stat__label">rozdíl za stejné auto</span>
+              <span class="stat__note">Performance 2022: Chrudim 830k vs. Hesensko 726k. Stejná verze.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ JAK TO FUNGUJE ============ -->
+        <section class="container section" id="jak">
+          <div class="section__head" data-reveal>
+            <p class="eyebrow">Jak to funguje</p>
+            <h2>Čtyři kroky. Ty děláš jenom první a poslední.</h2>
+          </div>
+          <div class="grid grid--4">
+            <article class="step" data-reveal>
+              <span class="step__num">01</span>
+              <h3>Specifikace</h3>
+              <p class="step__body">
+                Řekneš, co chceš. Model, rok, nájezd, výbava, strop ceny, kam jsi ochotný jet. Agent z toho udělá
+                filtr, který udrží i věci, co se do filtrů na bazarech nevejdou — „SOH nad 93 %“ nebo „ne po
+                autopůjčovně“.
+              </p>
+            </article>
+            <article class="step" data-reveal>
+              <span class="step__num">02</span>
+              <h3>Lov 24/7</h3>
+              <p class="step__body">
+                Agent projíždí sauto, bazoš, mobile.de a další trhy pořád dokola. Nový inzerát vidí v řádu minut —
+                ne až se k tomu dostaneš ty.
+              </p>
+            </article>
+            <article class="step" data-reveal>
+              <span class="step__num">03</span>
+              <h3>Prověření</h3>
+              <p class="step__body">
+                Dekóduje VIN, přečte fotky, dopočítá vzdálenost a doptá se prodejce na to, co chybí. Kus bez
+                doloženého SOH nedostane plné skóre, dokud ho nemá.
+              </p>
+            </article>
+            <article class="step" data-reveal>
+              <span class="step__num">04</span>
+              <h3>Shortlist a akce</h3>
+              <p class="step__body">
+                Ráno v 8:00 dostaneš seřazený list: kam volat první, co má smysl v ČR, co jen s dovozem. U každého
+                kusu konkrétní další krok.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <!-- ============ CO AGENT UMÍ ============ -->
+        <section class="container section" id="umi">
+          <div class="section__head" data-reveal>
+            <p class="eyebrow">Schopnosti</p>
+            <h2>Osm věcí, které za tebe udělá.</h2>
+            <p class="lead">Ne chatbot nad inzeráty. Agent, který sáhne na telefon, na fotky i na VIN.</p>
+          </div>
+          <div class="grid grid--4">
+            <article class="hud" data-reveal>
+              <span class="hud__scan"></span>
+              <span class="hud__index mono">01</span>
+              <h3 class="hud__title">Lov napříč trhy</h3>
+              <p class="hud__body">
+                sauto.cz, bazoš a mobile.de dnes; AutoScout24, tipcars, mobile.at a Marktplaats v plánu. Jedna
+                specifikace, všechny země, žádné duplicity.
+              </p>
+            </article>
+            <article class="hud" data-reveal>
+              <span class="hud__scan"></span>
+              <span class="hud__index mono">02</span>
+              <h3 class="hud__title">Doptá se na to, co chybí</h3>
+              <p class="hud__body">
+                Chybí SOH, počet majitelů, servisní historie? Agent napíše, zavolá nebo vyplní formulář — česky,
+                německy, anglicky — a doplní odpověď do karty vozu.
+              </p>
+            </article>
+            <article class="hud" data-reveal>
+              <span class="hud__scan"></span>
+              <span class="hud__index mono">03</span>
+              <h3 class="hud__title">Přečte fotky</h3>
+              <p class="hud__body">
+                Stav laku, nesedící díly, opotřebení interiéru, nájezd na displeji, škrábnutý nárazník. Pozná i
+                „pět fotek a všechny zezadu“.
+              </p>
+            </article>
+            <article class="hud" data-reveal>
+              <span class="hud__scan"></span>
+              <span class="hud__index mono">04</span>
+              <h3 class="hud__title">VIN a historie</h3>
+              <p class="hud__body">
+                Z VIN vytáhne skutečnou výbavu, verzi, datum výroby a svolávací akce. Ověří, jestli sedí to, co
+                tvrdí inzerát.
+              </p>
+            </article>
+            <article class="hud" data-reveal>
+              <span class="hud__scan"></span>
+              <span class="hud__index mono">05</span>
+              <h3 class="hud__title">Cenový scoring</h3>
+              <p class="hud__body">
+                Každý kus dostane skóre a odchylku od tvého benchmarku. „▼ 1 %“ i „▲ 12 %“ vidíš dřív, než někam
+                vyrazíš.
+              </p>
+            </article>
+            <article class="hud" data-reveal>
+              <span class="hud__scan"></span>
+              <span class="hud__index mono">06</span>
+              <h3 class="hud__title">Logistika a okruhy</h3>
+              <p class="hud__body">
+                Vzdálenost od tebe, plán jednoho výletu přes víc kusů, dvě prohlídky u jednoho dealera za sebou.
+                Vzdušná čára ×1,3 na reálnou silnici.
+              </p>
+            </article>
+            <article class="hud" data-reveal>
+              <span class="hud__scan"></span>
+              <span class="hud__index mono">07</span>
+              <h3 class="hud__title">Vyjednávání</h3>
+              <p class="hud__body">
+                Vede komunikaci s dealerem i soukromníkem. Ověří dostupnost, domluví termín, zkusí cenu. Ty do toho
+                vstoupíš, až když chceš.
+              </p>
+            </article>
+            <article class="hud" data-reveal>
+              <span class="hud__scan"></span>
+              <span class="hud__index mono">08</span>
+              <h3 class="hud__title">Papíry a dovoz</h3>
+              <p class="hud__body">
+                Kupní smlouva, DPH, Kurzzeitkennzeichen nebo odvoz, evidenční kontrola, STK, registrace, přepis.
+                Agent hlídá pořadí i termíny.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <!-- ============ REÁLNÝ REPORT ============ -->
+        <section class="container section" id="report">
+          <div class="section__head" data-reveal>
+            <p class="eyebrow">Důkaz</p>
+            <h2>Takhle vypadá ráno s CarHunterem.</h2>
+            <p class="lead">
+              Tohle není mockup. Tenhle report agent doopravdy poslal v 8:00 — 272 aktivních kusů v databázi, z toho
+              12, kam by šel osobně. Odkazy vedou na živé inzeráty.
+            </p>
+          </div>
+
+          <div class="report" data-report data-reveal>
+            <div class="report__bar">
+              <span class="report__dots"><i></i><i></i><i></i></span>
+              <span>Doručeno · 08:00 · CarHunter denní report</span>
+            </div>
+            <div class="report__inner">
+              <p class="report__title">Tesla M3 — ručně vybrané kusy k prohlédnutí</p>
+              <p class="report__sub" data-report-meta></p>
+              <p class="report__tldr" data-report-tldr></p>
+
+              <div class="report__tabs" role="tablist" aria-label="Skupiny inzerátů" data-report-tabs></div>
+              <div data-report-list></div>
+
+              <div class="report__foot" data-report-foot></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ KOMUNIKACE ============ -->
+        <section class="container section">
+          <div class="split">
+            <div class="section__head" data-reveal>
+              <p class="eyebrow">Komunikace</p>
+              <h2>Agent se nebojí ozvat.</h2>
+              <p class="lead">
+                Nejbližší top kus měl v inzerátu díru: žádné SOH baterie. A dealer e-maily nevyřizuje. Tady je, co
+                se stalo dál.
+              </p>
+              <p class="muted" style="font-size: var(--step--1)">
+                Doptání proběhlo v němčině, výsledek se propsal do skóre a kus se posunul nahoru v žebříčku. Bez
+                jediného tvého kliknutí.
+              </p>
+            </div>
+
+            <div class="thread" data-thread data-reveal>
+              <div class="msg msg--system" data-delay="700">
+                Chybí SOH · Automobile Zaglauer, Kirchberg · e-maily nevyřizují → WhatsApp
+              </div>
+              <div class="msg msg--agent" data-delay="700">
+                <div class="msg__who">Agent → dealer</div>
+                Guten Tag, ich interessiere mich für den Model 3 Performance (EZ 12/2022, 51.000 km). Könnten Sie
+                mir bitte das Batteriezertifikat bzw. einen Screenshot des SOH schicken? Und verkaufen Sie auch an
+                Privatkäufer aus Tschechien?
+              </div>
+              <div class="msg msg--dealer" data-delay="700">
+                <div class="msg__who">Dealer → agent</div>
+                Hallo, ja — Verkauf an Privat aus der EU ist kein Problem. SOH liegt bei 95 %, Zertifikat hängt an.
+                Sommer- und Winterräder sind dabei.
+              </div>
+              <div class="msg msg--system" data-delay="700">
+                Vytěženo: SOH 95 % ✓ · prodej soukromníkovi z EU ✓ · 8 kol ✓ → skóre 7 → 8
+              </div>
+              <div class="msg msg--agent" data-delay="700">
+                <div class="msg__who">Agent → dealer</div>
+                Danke! Ich komme aus Prag, ca. 160 km. Wäre Samstag um 10:00 zur Besichtigung möglich?
+              </div>
+              <div class="msg msg--dealer" data-delay="700">
+                <div class="msg__who">Dealer → agent</div>
+                Samstag 10:00 passt. Bis dann!
+              </div>
+              <div class="msg msg--system" data-delay="700">
+                Termín v kalendáři · sobota 10:00 · trasa Praha → Kirchberg ≈ 208 km po silnici
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ DOVOZ ============ -->
+        <section class="container section" id="dovoz">
+          <div class="split">
+            <div class="section__head" data-reveal>
+              <p class="eyebrow">Dovoz a papíry</p>
+              <h2>Nejlevnější auto bývá za hranicí. To je ta otravná část.</h2>
+              <p class="lead">
+                CarHunter tě provede celým řetězcem od rezervace po SPZ — včetně toho, co kdy stojí a v jakém
+                pořadí to musí jít.
+              </p>
+            </div>
+
+            <div class="timeline" data-reveal>
+              <div class="timeline__item">
+                <div class="timeline__dot"></div>
+                <div>
+                  <p class="timeline__title">Rezervace a ověření</p>
+                  <p class="timeline__body">
+                    Potvrzení, že prodají soukromníkovi z EU, vyžádání Batteriezertifikátu a domluvení termínu.
+                  </p>
+                  <span class="chip">SOH certifikát</span> <span class="chip">unfallfrei</span>
+                </div>
+              </div>
+              <div class="timeline__item">
+                <div class="timeline__dot"></div>
+                <div>
+                  <p class="timeline__title">Prohlídka a testovací jízda</p>
+                  <p class="timeline__body">
+                    Checklist na místě: SOH z displeje, kola, lak, servisní historie, shoda VIN s inzerátem.
+                  </p>
+                </div>
+              </div>
+              <div class="timeline__item">
+                <div class="timeline__dot"></div>
+                <div>
+                  <p class="timeline__title">Kupní smlouva a platba</p>
+                  <p class="timeline__body">Kaufvertrag, doklad o DPH. Cena včetně 19 % MwSt je konečná.</p>
+                  <span class="chip">19 % MwSt</span>
+                </div>
+              </div>
+              <div class="timeline__item">
+                <div class="timeline__dot"></div>
+                <div>
+                  <p class="timeline__title">Odvoz do ČR</p>
+                  <p class="timeline__body">Buď Kurzzeitkennzeichen a jedeš sám, nebo přeprava odtahovkou.</p>
+                  <span class="chip chip--good">~100 €</span> <span class="chip">8–15 000 Kč</span>
+                </div>
+              </div>
+              <div class="timeline__item">
+                <div class="timeline__dot"></div>
+                <div>
+                  <p class="timeline__title">Celní a daňové vyřízení</p>
+                  <p class="timeline__body">
+                    Ojetý vs. nový vůz, doklad o zaplacené DPH v zemi původu, COC list nebo technický průkaz.
+                  </p>
+                </div>
+              </div>
+              <div class="timeline__item">
+                <div class="timeline__dot"></div>
+                <div>
+                  <p class="timeline__title">Evidenční kontrola a STK</p>
+                  <p class="timeline__body">Na stanici technické kontroly, nutné před registrací.</p>
+                </div>
+              </div>
+              <div class="timeline__item">
+                <div class="timeline__dot"></div>
+                <div>
+                  <p class="timeline__title">Registrace, SPZ, přepis</p>
+                  <p class="timeline__body">
+                    Zápis do registru vozidel, přidělení značky, u spalovacích motorů ekologický poplatek.
+                  </p>
+                  <span class="chip">3–5 000 Kč</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ APLIKACE ============ -->
+        <section class="container section">
+          <div class="section__head" data-reveal>
+            <p class="eyebrow">Aplikace</p>
+            <h2>Report je jen výstup. Řídíš to z jednoho místa.</h2>
+          </div>
+          <div class="grid grid--3">
+            <div class="mock" data-reveal>
+              <div class="mock__bar">Specifikace</div>
+              <div class="mock__body">
+                <div class="mock__row"><span>model</span> <span class="accent">Tesla M3 LR / Perf</span></div>
+                <div class="mock__row"><span>rok</span> <span class="accent">2022+</span></div>
+                <div class="mock__row"><span>nájezd</span> <span class="accent">&lt; 70 000 km</span></div>
+                <div class="mock__row"><span>SOH</span> <span class="accent">≥ 93 %</span></div>
+                <div class="mock__row"><span>strop</span> <span class="accent">800 000 Kč</span></div>
+                <div class="mock__row"><span>dojedu</span> <span class="accent">600 km od Prahy</span></div>
+              </div>
+            </div>
+            <div class="mock" data-reveal>
+              <div class="mock__bar">Shortlist</div>
+              <div class="mock__body">
+                <div class="mock__row"><span>Zaglauer Perf</span> <span class="accent">9/10</span></div>
+                <div class="mock__bar-fill"><i style="width: 90%"></i></div>
+                <div class="mock__row"><span>AutoExpo LR</span> <span class="accent">8/10</span></div>
+                <div class="mock__bar-fill"><i style="width: 80%"></i></div>
+                <div class="mock__row"><span>NCAR Sokolov</span> <span class="accent">8/10</span></div>
+                <div class="mock__bar-fill"><i style="width: 78%"></i></div>
+                <div class="mock__row"><span>Mates Perf</span> <span>6/10</span></div>
+                <div class="mock__bar-fill"><i style="width: 58%"></i></div>
+              </div>
+            </div>
+            <div class="mock" data-reveal>
+              <div class="mock__bar">Deal room</div>
+              <div class="mock__body">
+                <div class="mock__row"><span>Zaglauer</span> <span class="accent">termín so 10:00</span></div>
+                <div class="mock__row"><span>Kary</span> <span>čeká na SOH</span></div>
+                <div class="mock__row"><span>AutoExpo</span> <span class="accent">nabídka 700k odeslána</span></div>
+                <div class="mock__row"><span>Djawaheri</span> <span>bez odpovědi 2 dny</span></div>
+                <div class="mock__row"><span>přeprava</span> <span>3 nabídky</span></div>
+                <div class="mock__row"><span>papíry</span> <span class="accent">checklist 0/7</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ BALÍČKY ============ -->
+        <section class="container section">
+          <div class="section__head" data-reveal>
+            <p class="eyebrow">Balíčky · návrh, ne ceník</p>
+            <h2>Od hlídače po dovoz na klíč.</h2>
+            <p class="lead">Čísla níž jsou nástřel do diskuze. Podstatné je, kde se láme ruční práce v automatiku.</p>
+          </div>
+          <div class="grid grid--3">
+            <article class="hud plan" data-reveal>
+              <span class="hud__scan"></span>
+              <p class="plan__name">Watch</p>
+              <p class="plan__price">zdarma</p>
+              <ul class="plan__list">
+                <li>jedna specifikace</li>
+                <li>české trhy</li>
+                <li>denní report v 8:00</li>
+                <li>upozornění na nový kus</li>
+              </ul>
+            </article>
+            <article class="hud plan plan--featured" data-reveal>
+              <span class="hud__scan"></span>
+              <p class="plan__name">Hunt</p>
+              <p class="plan__price">490 Kč <small>/ měsíc</small></p>
+              <ul class="plan__list">
+                <li>vše z Watch</li>
+                <li>evropské trhy (DE, AT, NL)</li>
+                <li>VIN dekodér a analýza fotek</li>
+                <li>agent se doptává prodejců</li>
+                <li>neomezené specifikace</li>
+              </ul>
+            </article>
+            <article class="hud plan" data-reveal>
+              <span class="hud__scan"></span>
+              <p class="plan__name">Concierge</p>
+              <p class="plan__price">% z úspory</p>
+              <ul class="plan__list">
+                <li>vše z Hunt</li>
+                <li>vyjednávání ceny</li>
+                <li>prohlídka přes partnera na místě</li>
+                <li>dovoz, papíry, registrace</li>
+                <li>přepis a předání</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <!-- ============ FAQ ============ -->
+        <section class="container section" id="faq">
+          <div class="section__head" data-reveal>
+            <p class="eyebrow">FAQ</p>
+            <h2>Co se ptají první.</h2>
+          </div>
+          <div class="faq" data-reveal>
+            <details>
+              <summary>Odkud bere data?</summary>
+              <p>
+                Z veřejně dostupných inzerátů. Žádné obcházení přihlášení ani placených zdí. Kde trh nabízí API,
+                jede se přes API; jinak se čte to, co vidí každý návštěvník.
+              </p>
+            </details>
+            <details>
+              <summary>Píše agent prodejcům sám za mě?</summary>
+              <p>
+                Jen když mu to dovolíš. Ve výchozím nastavení ti návrh zprávy ukáže a odešle až po odklepnutí.
+                U rutinních dotazů (SOH, počet majitelů, volný termín) se to dá přepnout na plný autopilot.
+              </p>
+            </details>
+            <details>
+              <summary>Funguje to i na jiná auta než Teslu?</summary>
+              <p>
+                Ano. Tesla byla první případ, protože má nejvíc skrytých parametrů — SOH baterie, Ryzen vs. Intel,
+                EAP, verze schovaná pod trvalým výkonem. Čím složitější specifikace, tím větší rozdíl proti ručnímu
+                hledání.
+              </p>
+            </details>
+            <details>
+              <summary>Co když auto koupím a bude to průšvih?</summary>
+              <p>
+                Agent není záruka a neposílá vůz na diagnostiku místo tebe. Je to filtr, který ušetří cesty za kusy
+                bez šance a vytáhne na světlo to, o čem inzerát mlčí. Rozhodnutí zůstává na tobě.
+              </p>
+            </details>
+            <details>
+              <summary>Kolik to reálně ušetří?</summary>
+              <p>
+                Na jednom Model 3 Performance vyšel rozdíl mezi Chrudimí a Hesenskem na zhruba 104 000 Kč — stejná
+                verze, srovnatelný nájezd. To je řádově víc než cokoliv, co se dá usmlouvat na místě.
+              </p>
+            </details>
+          </div>
+        </section>
+
+        <!-- ============ CTA ============ -->
+        <section class="container section">
+          <div class="cta" data-reveal>
+            <p class="eyebrow" style="justify-content: center">Pitch, ne produkt</p>
+            <h2>Napiš specifikaci. Zbytek je práce agenta.</h2>
+            <p class="lead" style="text-align: center">
+              CarHunter zatím běží jako soukromý prototyp nad jednou specifikací. Tahle stránka je návrh, jak by
+              z toho mohl být produkt.
+            </p>
+            <div class="hero__actions" style="justify-content: center">
+              <a class="btn btn--primary" href="https://github.com/kroufekd/car-hunter" rel="noopener">
+                Repozitář a dokumentace
+              </a>
+              <a
+                class="btn btn--ghost"
+                href="https://github.com/kroufekd/car-hunter/issues/new"
+                rel="noopener"
+              >
+                Mám k tomu poznámku
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="container footer__inner">
+          <span>CarHunter · pitch page · data z reálného reportu 18. 8. 2026</span>
+          <nav class="footer__links" aria-label="Patička">
+            <a href="https://github.com/kroufekd/car-hunter" rel="noopener">GitHub</a>
+            <a href="https://github.com/kroufekd/car-hunter/tree/master/concept" rel="noopener">Koncept</a>
+          </nav>
+        </div>
+      </footer>
+    </div>
+
+    <script src="assets/data/report.js"></script>
+    <script src="assets/js/mesh.js" defer></script>
+    <script src="assets/js/reveal.js" defer></script>
+    <script src="assets/js/report.js" defer></script>
+    <script src="assets/js/agent-chat.js" defer></script>
+  </body>
+</html>
