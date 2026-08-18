@@ -1,0 +1,378 @@
+/* CarHunter — sekce s reálným reportem, ukázka komunikace agenta, mockupy aplikace. */
+
+/* --- Rám reportu, ať vypadá jako doručený artefakt --- */
+
+.report {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+  overflow: hidden;
+}
+
+.report__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--hairline);
+  background: rgba(0, 0, 0, 0.28);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+
+.report__dots {
+  display: flex;
+  gap: 5px;
+}
+
+.report__dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--hairline-strong);
+}
+
+.report__inner {
+  padding: var(--space-4) var(--space-3);
+}
+
+.report__title {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.report__sub {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+  margin-top: 0.4rem;
+  line-height: 1.6;
+}
+
+.report__tldr {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--hairline);
+  border-left: 2px solid var(--lime);
+  border-radius: var(--radius-sm);
+  background: rgba(198, 242, 78, 0.04);
+  font-size: var(--step--1);
+  color: var(--ink-dim);
+  line-height: 1.7;
+}
+
+.report__tldr b {
+  color: var(--ink);
+}
+
+/* --- Přepínání skupin --- */
+
+.report__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: var(--space-4) 0 var(--space-3);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.tab {
+  padding: 0.6rem 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.tab:hover {
+  color: var(--ink-dim);
+}
+
+.tab[aria-selected="true"] {
+  color: var(--lime);
+  border-bottom-color: var(--lime);
+}
+
+.tab span {
+  color: var(--ink-faint);
+  margin-left: 0.35rem;
+}
+
+/* --- Karta jednoho inzerátu --- */
+
+.listing {
+  display: grid;
+  grid-template-columns: 46px 1fr auto;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--hairline);
+  align-items: start;
+  transition: background var(--dur-fast) var(--ease);
+}
+
+.listing:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.listing__score {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--lime);
+  border: 1px solid rgba(198, 242, 78, 0.28);
+  background: conic-gradient(var(--lime) calc(var(--score) * 36deg), rgba(255, 255, 255, 0.06) 0);
+  position: relative;
+}
+
+.listing__score::after {
+  content: attr(data-score);
+  position: absolute;
+  inset: 3px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #0b0e13;
+}
+
+.listing__main {
+  min-width: 0;
+}
+
+.listing__name {
+  font-weight: 600;
+  font-size: 0.98rem;
+  line-height: 1.4;
+  color: var(--ink);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.listing__name:hover {
+  color: var(--lime);
+}
+
+.listing__name::after {
+  content: " ↗";
+  color: var(--ink-faint);
+  font-size: 0.8em;
+}
+
+.listing__meta {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  margin-top: 0.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+  align-items: center;
+}
+
+.listing__meta b {
+  color: var(--cyan);
+  font-weight: 500;
+}
+
+.listing__note {
+  font-size: var(--step--1);
+  color: var(--ink-dim);
+  margin-top: 0.45rem;
+  padding-left: 0.7rem;
+  border-left: 1px solid var(--hairline);
+  line-height: 1.6;
+  max-width: 68ch;
+}
+
+.listing__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+}
+
+.listing__price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.listing__czk {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.listing__eur {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+}
+
+.listing__flag {
+  font-size: 0.9rem;
+}
+
+.report__foot {
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--hairline);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: space-between;
+}
+
+/* --- Ukázka komunikace agenta --- */
+
+.thread {
+  display: grid;
+  gap: var(--space-2);
+  min-height: 320px;
+  align-content: start;
+}
+
+.msg {
+  max-width: 88%;
+  padding: 0.7rem 0.95rem;
+  border-radius: var(--radius);
+  font-size: var(--step--1);
+  line-height: 1.6;
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.msg.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.msg--agent {
+  justify-self: start;
+  border-color: rgba(198, 242, 78, 0.28);
+  background: rgba(198, 242, 78, 0.06);
+}
+
+.msg--dealer {
+  justify-self: end;
+  border-color: rgba(110, 231, 255, 0.22);
+  background: rgba(110, 231, 255, 0.05);
+}
+
+.msg--system {
+  justify-self: stretch;
+  max-width: none;
+  border-style: dashed;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--lime);
+}
+
+.msg__who {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.3rem;
+}
+
+/* --- Mockupy aplikace --- */
+
+.mock {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.mock__bar {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink-faint);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.66rem;
+}
+
+.mock__body {
+  padding: var(--space-3);
+  display: grid;
+  gap: 0.5rem;
+  color: var(--ink-dim);
+}
+
+.mock__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed var(--hairline);
+}
+
+.mock__row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.mock__bar-fill {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.mock__bar-fill i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(to right, var(--cyan), var(--lime));
+}
+
+/* --- Mobil: cena pod inzerát, ne do třetího sloupce --- */
+
+@media (max-width: 720px) {
+  .listing {
+    grid-template-columns: 38px 1fr;
+  }
+
+  .listing__price {
+    grid-column: 2;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-2);
+    margin-top: 0.35rem;
+  }
+
+  .report__inner {
+    padding-inline: var(--space-2);
+  }
+
+  .thread .msg {
+    max-width: 100%;
+  }
+}

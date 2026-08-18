@@ -1,0 +1,329 @@
+/* CarHunter — layout: container, sekce, nav, hero, grid, patička. */
+
+.page {
+  position: relative;
+  z-index: 1;
+}
+
+.container {
+  width: min(100% - 2.5rem, var(--container));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--space-6);
+  position: relative;
+}
+
+.section--tight {
+  padding-block: var(--space-5);
+}
+
+.section__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  max-width: 68ch;
+}
+
+.rule {
+  height: 1px;
+  background: linear-gradient(to right, var(--hairline), transparent);
+}
+
+/* --- Navigace --- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background: rgba(7, 9, 12, 0.62);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding-block: var(--space-2);
+}
+
+.nav__links {
+  display: flex;
+  gap: var(--space-4);
+  margin-left: auto;
+  font-size: var(--step--1);
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.nav__links a {
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.nav__links a:hover {
+  color: var(--lime);
+}
+
+@media (max-width: 900px) {
+  .nav__links {
+    display: none;
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: 1.05rem;
+}
+
+.logo__mark {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+
+/* --- Hero --- */
+
+.hero {
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-6);
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: var(--space-5);
+  align-items: center;
+  min-height: min(88vh, 820px);
+}
+
+@media (max-width: 980px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding-top: var(--space-5);
+  }
+}
+
+.hero__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.hero__title span {
+  display: block;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--hairline);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--ink-faint);
+}
+
+.hero__fact strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  color: var(--ink);
+  line-height: 1;
+}
+
+.hero__visual {
+  position: relative;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+
+@media (max-width: 980px) {
+  .hero__visual {
+    max-width: 460px;
+    width: 100%;
+    margin-inline: auto;
+  }
+}
+
+/* Radarový disk s blipy a monitorem */
+
+.hero__radar {
+  position: relative;
+  width: min(100%, 460px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  background: radial-gradient(circle at 50% 50%, rgba(198, 242, 78, 0.05), transparent 62%);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.blip {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 12px 2px rgba(110, 231, 255, 0.55);
+  animation: blip-fade 7s linear infinite;
+}
+
+.blip--1 {
+  left: 30%;
+  top: 34%;
+  animation-delay: 0.6s;
+}
+.blip--2 {
+  left: 63%;
+  top: 27%;
+  animation-delay: 2.1s;
+  background: var(--lime);
+  box-shadow: 0 0 12px 2px rgba(198, 242, 78, 0.55);
+}
+.blip--3 {
+  left: 71%;
+  top: 62%;
+  animation-delay: 3.9s;
+}
+.blip--4 {
+  left: 38%;
+  top: 70%;
+  animation-delay: 5.4s;
+  background: var(--amber);
+  box-shadow: 0 0 12px 2px rgba(255, 176, 32, 0.5);
+}
+
+@keyframes blip-fade {
+  0%,
+  100% {
+    opacity: 0.12;
+    transform: scale(0.8);
+  }
+  6% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+  30% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+}
+
+.hero__monitor {
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  transform: translateX(-50%);
+  width: min(84%, 280px);
+  display: grid;
+  gap: 0.3rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: rgba(7, 9, 12, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 0.72rem;
+  color: var(--ink-dim);
+  letter-spacing: 0.03em;
+}
+
+.hero__monitor-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* --- Obecné gridy --- */
+
+.grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.grid--4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 980px) {
+  .grid--3,
+  .grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .grid--2,
+  .grid--3,
+  .grid--4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Split sekce (text + vizuál) --- */
+
+.split {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Patička --- */
+
+.footer {
+  border-top: 1px solid var(--hairline);
+  padding-block: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--step--1);
+  color: var(--ink-faint);
+  font-family: var(--font-mono);
+}
+
+.footer__links {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.footer__links a:hover {
+  color: var(--lime);
+}
